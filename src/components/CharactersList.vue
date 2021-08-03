@@ -1,7 +1,9 @@
 <template>
   <div>
     <ul v-if="characters.length && !isLoading" class="characters-list">
-      <li v-for="item in characters" :key="item.id" class="characters-list__item" title="Узнать подробнее">{{ item.name }}</li>
+      <li v-for="item in characters" :key="item.id" class="characters-list__item" title="Узнать подробнее">
+        <router-link :to="{ name: 'Character', params: {id: item.id} }">{{ item.name }}</router-link>
+      </li>
     </ul>
     <div v-else-if="!isLoading">
       <div>Произошла ошибка :(</div>
@@ -38,7 +40,6 @@ export default {
           })
           this.isLoading = false;
           this.charactersShown += 10;
-          console.log(this.characters);
         })
         .catch((error) => {
           this.isLoading = false;
@@ -61,6 +62,12 @@ export default {
     display: inline-block
     margin-bottom: 20px
     cursor: pointer
+    a 
+      color: #fff
+      text-decoration: none
+      transition: ease .3s
+      &:hover
+        color: #fc3903
 .more-characters-btn
   cursor: pointer
 
