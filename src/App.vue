@@ -16,7 +16,7 @@ body
   background: #000
 
 #app
-  font-family: Avenir, Helvetica, Arial, sans-serif
+  font: 400 22px "RobotoCondensed Bold", "Trebuchet MS", Helvetica,Arial, sans-serif
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   text-align: center
@@ -28,5 +28,5 @@ body
   left: 40px
 
 .content
-  padding-top: 100px
+  padding: 100px 100px 100px 200px
 </style>
