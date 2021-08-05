@@ -5,7 +5,7 @@
         <router-link :to="{ name: 'Character', params: {id: item.id} }">{{ item.name }}</router-link>
       </li>
     </ul>
-    <div v-else-if="!isLoading">
+    <div class="characters-list__error" v-if="!isLoading && error">
       <div>Произошла ошибка :(</div>
       <div>Пожалуйста, попробуйте повторить запрос позже</div>
     </div>
@@ -33,6 +33,7 @@ export default {
   data () {
     return {
       isLoading: true,
+      error: false,
       characters: [],
       charactersShown: 0
     }
@@ -40,8 +41,14 @@ export default {
   created () {
     this.getCharacters();
   },
+  updated () {
+    if (!this.isLoading && this.characters.length) {
+      this.scrollToLast();
+    }
+  },
   methods: {
     getCharacters () {
+      this.error = false;
       this.isLoading = true;
 
       axios.get(`http://gateway.marvel.com/v1/public/characters?apikey=${publicKey}&offset=${this.charactersShown}&limit=10`)
@@ -50,13 +57,21 @@ export default {
           data.forEach((item) => {
             this.characters.push(item);
           })
-          this.isLoading = false;
           this.charactersShown += 10;
+
+          this.isLoading = false;
+          this.error = false;
         })
         .catch((error) => {
           this.isLoading = false;
+          this.error = true;
           console.log(error);
         });
+    },
+    scrollToLast () {
+      if (this.$el.querySelector('.characters-list')) {
+        window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+      }
     }
   }
 }
@@ -66,10 +81,14 @@ export default {
 
 .list-wrapper
   position: relative
-.v-spinner
+.v-spinner,
+.characters-list__error
   position: absolute
   bottom: -50px
   left: 40px
+.characters-list__error
+  div
+    text-align: left
 .characters-list
   display: flex
   flex-direction: column
@@ -88,7 +107,7 @@ export default {
         color: #fc3903
 .more-characters-btn
   position: fixed
-  right: 450px
+  right: 400px
   top: 50%
   transform: translateY(-50%)
   padding: 10px 20px 12px
