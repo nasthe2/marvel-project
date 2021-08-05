@@ -5,7 +5,7 @@
         <router-link :to="{ name: 'Character', params: {id: item.id} }">{{ item.name }}</router-link>
       </li>
     </ul>
-    <div class="characters-list__error" v-if="!isLoading && error">
+    <div v-if="!isLoading && error" class="characters-list__error">
       <div>Произошла ошибка :(</div>
       <div>Пожалуйста, попробуйте повторить запрос позже</div>
     </div>
@@ -53,14 +53,14 @@ export default {
 
       axios.get(`http://gateway.marvel.com/v1/public/characters?apikey=${publicKey}&offset=${this.charactersShown}&limit=10`)
         .then((response) => {
+          this.isLoading = false;
+          this.error = false;
+
           const data = response.data.data.results;
           data.forEach((item) => {
             this.characters.push(item);
           })
           this.charactersShown += 10;
-
-          this.isLoading = false;
-          this.error = false;
         })
         .catch((error) => {
           this.isLoading = false;

@@ -6,13 +6,67 @@
         </path>
       </svg>
     </router-link>
-    this is character component
+    <div v-if="character" class="character__info">
+      <div class="character__info__img"><img :src="url" alt="Изображение персонажа"></div>
+      <div class="character__info__tx">
+        <h3>{{  character.name }}</h3>
+        <p>{{ character.description ? character.description : 'Хмм... Кажется, у этого персонажа отсутствует описание 🤔' }}</p>
+      </div>
+    </div>
+    <div v-if="!isLoading && error" class="character__error">
+      <div>Произошла ошибка :(</div>
+      <div>Пожалуйста, попробуйте обновить страницу</div>
+    </div>
+    <dot-loader v-if="isLoading" :loading="isLoading" :color="'#fc3903'" :size="'26px'"></dot-loader>
   </div>
 </template>
 
 <script>
+
+import DotLoader from 'vue-spinner/src/PulseLoader.vue'
+import { privateKey, publicKey } from '../marvel';
+import axios from 'axios';
+
 export default {
-  name: 'Character'
+  name: 'Character',
+  components: {
+    DotLoader
+  },
+  data () {
+    return {
+      isLoading: true,
+      error: false,
+      character: null,
+      url: '',
+      size: 'standard_large.jpg'
+    }
+  },
+  created () {
+    this.getCharacter();
+  },
+  methods: {
+    getCharacter () {
+      this.error = false;
+      this.isLoading = true;
+
+      const id = this.$route.params.id;
+
+      axios.get(`http://gateway.marvel.com/v1/public/characters/${id}?apikey=${publicKey}`)
+        .then((response) => {
+          this.isLoading = false;
+          this.error = false;
+
+          console.log(response.data.data.results);
+          this.character = response.data.data.results[0];
+          this.url = `${this.character.thumbnail.path}/${this.size}`;
+        })
+        .catch((error) => {
+          this.isLoading = false;
+          this.error = true;
+          console.log(error);
+        });
+    }
+  }
 }
 </script>
 
@@ -20,6 +74,7 @@ export default {
 
 .character
   position: relative
+  padding-left: 300px
 .back-icon
   position: absolute
   top: -4px
@@ -30,5 +85,16 @@ export default {
   &:hover
     svg path
       fill: #fc3903
+.character__error
+  font-family: "RobotoCondensed Bold", "Trebuchet MS", Helvetica,Arial, sans-serif
+.character__info
+  display: flex
+.character__info__img
+  margin-right: 20px
+.character__info__tx
+  max-width: 400px
+  font-family: "RobotoCondensed Bold", "Trebuchet MS", Helvetica,Arial, sans-serif
+  h3
+    margin-top: 0
 
 </style>
