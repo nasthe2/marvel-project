@@ -1,19 +1,14 @@
-# marvel-project
+# Marvel Heroes Project
 
-## Project setup
+Хочешь узнать больше о персонажах вселенной Marvel? Скорее загляни в этот проект!
+
+Для запуска:
+## Установи зависимости
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Запусти проект локально
 ```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
