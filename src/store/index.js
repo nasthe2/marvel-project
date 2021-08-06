@@ -10,7 +10,6 @@ export default new Vuex.Store({
   mutations: {
     SET_CHARACTERS: (state, characters) => {
       state.characters = state.characters.concat(characters);
-      console.log(state.characters);
     }
   },
   actions: {

@@ -1,7 +1,7 @@
 <template>
   <div class="list-wrapper">
     <ul v-if="characters.length" class="characters-list">
-      <li v-for="item in characters" :key="item.id" class="characters-list__item" title="Узнать подробнее">
+      <li v-for="(item, index) in characters" :key="index" class="characters-list__item" title="Узнать подробнее">
         <router-link :to="{ name: 'Character', params: {id: item.id} }">{{ item.name }}</router-link>
       </li>
     </ul>
@@ -49,7 +49,7 @@ export default {
     }
   },
   updated () {
-    if (!this.isLoading && this.characters.length) {
+    if (!this.isLoading) {
       this.scrollToLast();
     }
   },
@@ -57,6 +57,9 @@ export default {
     getCharacters () {
       this.error = false;
       this.isLoading = true;
+      if (this.characters.length) {
+        this.scrollToLast();
+      } 
 
       axios.get(`http://gateway.marvel.com/v1/public/characters?apikey=${publicKey}&offset=${this.characters.length}&limit=10`)
         .then((response) => {
@@ -107,11 +110,14 @@ export default {
   &__item
     display: inline-block
     margin-bottom: 20px
+    text-align: left
     cursor: pointer
     a 
       color: #fff
       text-decoration: none
       transition: ease .3s
+      &:nth-last-child(-n+10)
+        animation: blinker 1s ease 1
       &:hover
         color: #fc3903
 .more-characters-btn
@@ -131,5 +137,22 @@ export default {
   transition: ease .3s
   &:hover
     opacity: 1
+
+@keyframes blinker
+  50%
+    opacity: .4
+
+@media (max-width: 1024px)
+  .characters-list
+    padding-inline-start: 0
+
+  .more-characters-btn
+    top: 30%
+    right: 140px
+
+@media (max-width: 475px)
+  .more-characters-btn
+    top: 54px
+    right: 20px
 
 </style>

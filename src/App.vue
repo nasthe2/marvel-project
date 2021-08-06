@@ -29,4 +29,15 @@ body
 
 .content
   padding: 100px 100px 100px 200px
+
+@media (max-width: 1024px)
+  .content
+    padding: 100px 50px 50px 40px
+
+@media (max-width: 475px)
+  .app__logo
+    left: 20px
+  .content
+    padding-left: 20px
+
 </style>

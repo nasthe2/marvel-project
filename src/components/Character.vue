@@ -56,7 +56,6 @@ export default {
           this.isLoading = false;
           this.error = false;
 
-          console.log(response.data.data.results);
           this.character = response.data.data.results[0];
           this.url = `${this.character.thumbnail.path}/${this.size}`;
         })
@@ -96,5 +95,30 @@ export default {
   font-family: "RobotoCondensed Bold", "Trebuchet MS", Helvetica,Arial, sans-serif
   h3
     margin-top: 0
+
+@media (max-width: 1024px)
+  .character
+    padding-top: 40px
+    padding-left: 250px
+  .back-icon
+    top: 36px
+    left: 95px
+
+@media (max-width: 475px)
+  .character
+    padding-left: 65px
+    padding-top: 25px
+  .back-icon
+    top: 24px
+    left: 0
+  .character__info
+    flex-direction: column
+  .character__info__img
+    display: flex
+    justify-content: flex-start
+    margin-right: 0
+    margin-bottom: 30px
+  .character__info__tx
+    text-align: left
 
 </style>
