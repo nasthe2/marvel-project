@@ -22,6 +22,8 @@
 <script>
 
 import DotLoader from 'vue-spinner/src/PulseLoader.vue'
+
+import { mapState } from 'vuex';
 import { privateKey, publicKey } from '../marvel';
 import axios from 'axios';
 
@@ -32,14 +34,19 @@ export default {
   },
   data () {
     return {
-      isLoading: true,
-      error: false,
-      characters: [],
-      charactersShown: 0
+      isLoading: false,
+      error: false
     }
   },
+  computed: {
+    ...mapState({
+      characters: state => state.characters
+    })
+  },
   created () {
-    this.getCharacters();
+    if (!this.characters.length) {
+      this.getCharacters();
+    }
   },
   updated () {
     if (!this.isLoading && this.characters.length) {
@@ -51,16 +58,18 @@ export default {
       this.error = false;
       this.isLoading = true;
 
-      axios.get(`http://gateway.marvel.com/v1/public/characters?apikey=${publicKey}&offset=${this.charactersShown}&limit=10`)
+      axios.get(`http://gateway.marvel.com/v1/public/characters?apikey=${publicKey}&offset=${this.characters.length}&limit=10`)
         .then((response) => {
           this.isLoading = false;
           this.error = false;
 
           const data = response.data.data.results;
+          const characters = [];
           data.forEach((item) => {
-            this.characters.push(item);
+            characters.push(item);
           })
-          this.charactersShown += 10;
+
+          this.$store.commit('SET_CHARACTERS', characters);
         })
         .catch((error) => {
           this.isLoading = false;
