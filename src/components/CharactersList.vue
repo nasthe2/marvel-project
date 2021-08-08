@@ -151,6 +151,9 @@ export default {
     right: 140px
 
 @media (max-width: 475px)
+  .characters-list__error
+    bottom: unset
+    left: 0
   .more-characters-btn
     top: 54px
     right: 20px
