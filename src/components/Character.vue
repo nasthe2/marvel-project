@@ -51,7 +51,7 @@ export default {
 
       const id = this.$route.params.id;
 
-      axios.get(`https://gateway.marvel.com/v1/public/characters/${id}?apikey=${publicKey}`)
+      axios.get(`http://gateway.marvel.com/v1/public/characters/${id}?apikey=${publicKey}`)
         .then((response) => {
           this.isLoading = false;
           this.error = false;

@@ -61,7 +61,7 @@ export default {
         this.scrollToLast();
       } 
 
-      axios.get(`https://gateway.marvel.com/v1/public/characters?apikey=${publicKey}&offset=${this.characters.length}&limit=10`)
+      axios.get(`http://gateway.marvel.com/v1/public/characters?apikey=${publicKey}&offset=${this.characters.length}&limit=10`)
         .then((response) => {
           this.isLoading = false;
           this.error = false;
